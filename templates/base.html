@@ -11,7 +11,9 @@
     <div class="container">
         <header class="header">
             <div class="logo">
-                <span style="color: #ff4444;">Lock</span><span style="color: #fff;">sen</span>
+                <a href="{{ url_for('chats') }}" style="text-decoration: none;">
+                    <span style="color: #ff4444;">Lock</span><span style="color: #fff;">sen</span>
+                </a>
             </div>
             {% if current_user.is_authenticated %}
             <nav class="nav">
