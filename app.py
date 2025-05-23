@@ -4,7 +4,10 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import os
+from dotenv import load_dotenv
+load_dotenv()
 from config import Config
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
