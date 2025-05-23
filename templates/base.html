@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Locksen - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <span style="color: #ff4444;">Lock</span><span style="color: #fff;">sen</span>
+            </div>
+            {% if current_user.is_authenticated %}
+            <nav class="nav">
+                <a href="{{ url_for('chats') }}" class="nav-link"><i class="fas fa-comments"></i></a>
+                <a href="{{ url_for('search') }}" class="nav-link"><i class="fas fa-search"></i></a>
+                <a href="{{ url_for('profile') }}" class="nav-link"><i class="fas fa-user"></i></a>
+                <a href="{{ url_for('logout') }}" class="nav-link"><i class="fas fa-sign-out-alt"></i></a>
+            </nav>
+            {% endif %}
+        </header>
+        
+        <main class="main-content">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flashes">
+                        {% for message in messages %}
+                            <div class="flash">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

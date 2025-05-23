@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Locksen - Чаты{% endblock %}
+
+{% block content %}
+<div class="chats-container">
+    <div class="chats-header">
+        <h2>Чаты</h2>
+        <a href="{{ url_for('search') }}" class="search-btn"><i class="fas fa-search"></i> Найти пользователя</a>
+    </div>
+    
+    {% if chats %}
+    <div class="chats-list">
+        {% for chat, last_message in chats.items() %}
+        <a href="{{ url_for('chat', user_id=chat.id) }}" class="chat-item">
+            <div class="chat-avatar">
+                <img src="{{ url_for('uploaded_file', filename=chat.avatar) }}" alt="{{ chat.display_name }}">
+            </div>
+            <div class="chat-info">
+                <h3>{{ chat.display_name }}</h3>
+                <p class="last-message">
+                    {% if last_message %}
+                        {% if last_message.sender_id == current_user.id %}
+                            Вы: {{ last_message.content|truncate(30) }}
+                        {% else %}
+                            {{ last_message.content|truncate(30) }}
+                        {% endif %}
+                    {% else %}
+                        Нет сообщений
+                    {% endif %}
+                </p>
+            </div>
+        </a>
+        {% endfor %}
+
+    </div>
+    {% else %}
+    <div class="no-chats">
+        <p>У вас пока нет чатов</p>
+        <a href="{{ url_for('search') }}" class="btn-primary">Найти пользователя</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

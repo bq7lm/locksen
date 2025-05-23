@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Locksen - Чат с {{ partner.display_name }}{% endblock %}
+
+{% block content %}
+<div class="chat-container">
+    <div class="chat-header">
+        <a href="{{ url_for('chats') }}" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+        <div class="chat-partner">
+            <div class="partner-avatar">
+                <img src="{{ url_for('uploaded_file', filename=partner.avatar) }}" alt="{{ partner.display_name }}">
+            </div>
+            <h2>{{ partner.display_name }}</h2>
+        </div>
+    </div>
+    
+    <div class="messages-container" id="messages-container">
+        {% for message in messages %}
+        <div class="message {% if message.sender_id == current_user.id %}sent{% else %}received{% endif %}">
+            <div class="message-content">
+                <p>{{ message.content }}</p>
+                <span class="message-time">{{ message.timestamp.strftime('%H:%M') }}</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="message-input">
+        <form method="POST" id="message-form">
+            <input type="text" name="message" placeholder="Напишите сообщение..." required>
+            <button type="submit"><i class="fas fa-paper-plane"></i></button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Прокрутка вниз при загрузке
+    window.onload = function() {
+        const container = document.getElementById('messages-container');
+        container.scrollTop = container.scrollHeight;
+    };
+    
+    // AJAX отправка сообщений (опционально)
+    document.getElementById('message-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const input = form.querySelector('input[name="message"]');
+        const message = input.value.trim();
+        
+        if (message) {
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `message=${encodeURIComponent(message)}`
+            }).then(() => {
+                window.location.reload();
+            });
+        }
+    });
+</script>
+{% endblock %}

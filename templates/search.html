@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Locksen - Поиск{% endblock %}
+
+{% block content %}
+<div class="search-container">
+    <div class="search-header">
+        <h2>Поиск пользователей</h2>
+        <form method="POST" class="search-form">
+            <input type="text" name="query" placeholder="Введите имя..." value="{{ query or '' }}" required>
+            <button type="submit"><i class="fas fa-search"></i></button>
+        </form>
+    </div>
+    
+    {% if users %}
+    <div class="users-list">
+        {% for user in users %}
+        <a href="{{ url_for('chat', user_id=user.id) }}" class="user-item">
+            <div class="user-avatar">
+                <img src="{{ url_for('uploaded_file', filename=user.avatar) }}" alt="{{ user.display_name }}">
+            </div>
+            <div class="user-info">
+                <h3>{{ user.display_name }}</h3>
+                <p>@{{ user.username }}</p>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% elif query %}
+    <div class="no-results">
+        <p>Пользователи не найдены</p>
+    </div>
+    {% else %}
+    <div class="search-instruction">
+        <p>Введите имя пользователя или отображаемое имя для поиска</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
